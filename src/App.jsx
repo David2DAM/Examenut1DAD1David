@@ -15,29 +15,38 @@ import Checkbox from '@mui/material/Checkbox';
 
 
 function App() {
-  const [genero, setGenero] = useState(''); // <-- valor inicial vacío (ninguno seleccionado)
     const [favorito, setFav] = useState(''); // <-- valor inicial vacío (ninguno seleccionado)
 
+   const [data,setData] = useState({nombre:'',apellidos:'',edad:'',genero:''})
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setData({ ...data, [name]: value });
+  };
+  const handleLimpiar = () => {
+    setData({ nombre: "", apellidos: "", edad: "", genero: "" }); 
+    setFav('');
+   };
   function cambioSelect(e){
-    setFav(e.target.value); // ✅ CORRECCIÓN: Llama a la función, no le asignes un valor.
+    setFav(e.target.value); 
   }
 
   return (
     <>        
     
       <Box style={{flexDirection:"row" }}>
-        <TextField style={{padding:"10px",width:"450px"}} placeholder='Nombre*'></TextField>
-        <TextField style={{padding:"10px",width:"400px"}} placeholder='Apellidos*'></TextField>
-        <TextField style={{padding:"10px",width:"200px"}} placeholder='Edad*'></TextField>
+        <TextField style={{padding:"10px",width:"450px"}} name="nombre" onChange={handleChange} required="true" placeholder='Nombre*'></TextField>
+        <TextField style={{padding:"10px",width:"400px"}} name="apellidos" onChange={handleChange} required="true" placeholder='Apellidos*'></TextField>
+        <TextField style={{padding:"10px",width:"200px"}} type='number' name="edad" onChange={handleChange} required="true" placeholder='Edad*'></TextField>
         </Box>
         <br/>
         <Box style={{flexDirection:"row"}}>
            
             <div id="izquierda">Generos</div> 
-            <RadioGroup style={{  marginLeft: '100px',flexDirection: 'row' }} name="genero" value={genero}>
-              <Radio /> Masculino
-              <Radio /> Femenino
-              <Radio /> Otro               
+            <RadioGroup style={{  marginLeft: '100px',flexDirection: 'row' }} name="genero" value={data.genero} onChange={handleChange}>
+              <Radio value={"masculino"}/> Masculino
+              <Radio value={"femenino"}/> Femenino
+              <Radio value={"otro"}/> Otro               
               
               <Select style={{ marginLeft: '200px', width:"500px" }}sx={{ ml: 4 }} value={favorito} onChange={cambioSelect}>
               <MenuItem value={"JavaScript"}>JavaScript</MenuItem>
@@ -57,10 +66,10 @@ function App() {
         </div>
         <br/>
 
-        <Button variant="contained" color="primary"style={{ flex:"true", maxWidth: '200px' }}>
+        <Button variant="contained" color="primary"style={{ flex:"true", maxWidth: '200px' }} onClick={()=> console.log(data)}>
           Enviar
         </Button>
-        <Button color="info">
+        <Button color="info" onClick={handleLimpiar}>
           Limpiar
         </Button>
     </>
